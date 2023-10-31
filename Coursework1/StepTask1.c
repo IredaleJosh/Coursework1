@@ -11,8 +11,6 @@ typedef struct {
 
 // Define any additional variables here
 
-
-
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
@@ -41,22 +39,10 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 }
 
-// Complete the main function
+//Main Function
 int main() 
 {
-    
-    char dataline[] = "2023-09-01,12:15,270"; //must take first 3 lines from csv file
-    char my_delimiter = ',';
-
-    char my_date[11];
-    char my_time[6];
-    char my_steps[8];
-
-    tokeniseRecord(dataline, &my_delimiter, my_date, my_time, my_steps);
-
-    printf("%s/%s/%s\n", my_date, my_time, my_steps); //outputs in correct format
-
-
+    //Open file to read
     char filename [] = "FitnessData_2023.csv";
     FILE *file = fopen(filename, "r");
     if(file == NULL)
@@ -65,18 +51,47 @@ int main()
         return 1;
     }
 
-    int size = 21;
-    char line[size];
-    int count = 0;
-    int i = 0;
+    char line_count[24]; //For counting records
+    int record_num = 0;
 
-    while(fgets(line, size, file) != NULL)
+    //Counts number of records in file
+    while(fgets(line_count, 24, file) != NULL)
     {
-        
+        record_num = record_num + 1;
+    }
+    printf("Number of records in file: %d\n", record_num);
+
+    //Close file, so can use another fgets
+    fclose(file);
+
+    //Open file to use fgets again
+    char filename_2 [] = "FitnessData_2023.csv";
+    FILE *file_2 = fopen(filename_2, "r");
+    if(file_2 == NULL)
+    {
+        perror("");
+        return 1;
     }
 
-    printf("Number of records in file: %d", count);
+    //Prints out first 3 lines
+    for(int i = 0; i < 3; i++)
+    {
+        char dataline [24]; //To store line from file
 
-    fclose(file);
+        //Gets first line from file, then 2nd, then 3rd
+        fgets(dataline, 24, file_2);
+
+        //For token function
+        char my_delimiter = ',';
+        char my_date[11];
+        char my_time[6];
+        char my_steps[8];
+        //Runs token function
+        tokeniseRecord(dataline, &my_delimiter, my_date, my_time, my_steps);
+        //Prints in wanted format
+        printf("%s/%s/%s", my_date, my_time, my_steps);
+    }
+
+    fclose(file_2);
     return 0;
 }
