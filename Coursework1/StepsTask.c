@@ -89,7 +89,8 @@ int main()
         //Runs token function
         tokeniseRecord(dataline, &my_delimiter, my_date, my_time, my_steps);
         //Prints in wanted format
-        printf("%s/%s/%s", my_date, my_time, my_steps);
+        int step_2 = atoi(my_steps);
+        printf("%s/%s/%d\n", my_date, my_time, step_2);
     }
 
     fclose(file_2);
